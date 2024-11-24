@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背单词页面</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+        textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button#submitBtn {
+            background-color: #007bff;
+            color: white;
+        }
+        button#restartBtn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .result {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+        #quizContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #startButtonContainer {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #unitSelectionContainer {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>背单词</h2>
+        <div id="unitSelectionContainer">
+            <select id="unitSelect">
+                <option value="">请选择单元</option>
+                <option value="unit1">7年级Unit1</option>
+                <option value="unit2">7年级Unit2</option>
+                <option value="unit3">7年级Unit3</option>
+                <option value="unit4">7年级Unit4</option>
+            </select>
+            <button onclick="addWords()">添加</button>
+        </div>
+        <textarea id="wordInput" rows="5" placeholder="输入单词或词组（每行一个，格式为 英文:中文）"></textarea><br>
+        <div id="startButtonContainer">
+            <button onclick="startQuiz()">开始测试</button>
+        </div>
+        <div id="quizContainer" style="display:none;">
+            <p id="question"></p>
+            <input type="text" id="answerInput"><br>
+            <button id="submitBtn" onclick="checkAnswer()">提交</button>
+            <div id="result" class="result"></div>
+            <button id="restartBtn" onclick="restartQuiz()" style="display:none;">重新开始</button>
+        </div>
+    </div>
+
+    <script>
+        const wordGroups = {
+            unit1: [
+                "curious:好奇的",
+                "magazine:杂志",
+                "test:测试",
+                "windsurf:做帆板运动",
+                "feeling:感受",
+                "brave:勇敢的",
+                "challenge:挑战",
+                "machine:机器",
+                "traffic:交通",
+                "board:板",
+                "print:打印",
+                "printing:印刷",
+                "improve:改善",
+                "camp:露营",
+                "grow:生长",
+                "sticker:贴纸",
+                "power:驱动",
+                "renewable:可再生的",
+                "discuss:讨论",
+                "everywhere:到处",
+                "impossible:不可能的",
+                "solar panel:太阳能电池板",
+                "solar cell:太阳能电池",
+                "holder:支托之物",
+                "fail:失败",
+                "pizza:比萨饼",
+                "burn:烫伤",
+                "pan:平底锅",
+                "troublesome:令人烦恼的",
+                "luckily:幸好",
+                "excitedly:兴奋地",
+                "layer:层",
+                "separate:分离",
+                "countless:无数的",
+                "succeed:成功",
+                "hopefully:有希望地",
+                "stick:粘贴",
+                "device:仪器",
+                "away:离开",
+                "take away:拿走",
+                "creative:有创造力的",
+                "handle:把手",
+                "pround:骄傲的"
+            ],
+            unit2: [
+                
+            ],
+            unit3: [
+                
+            ],
+            unit4: [
+                
+            ]
+        };
+
+        function addWords() {
+            const selectedUnit = document.getElementById('unitSelect').value;
+            if (!selectedUnit) return alert('请选择一个单元');
+
+            const wordsToAdd = wordGroups[selectedUnit].join('\n');
+            const currentWords = document.getElementById('wordInput').value.trim();
+            if (currentWords) {
+                document.getElementById('wordInput').value = `${currentWords}\n${wordsToAdd}`;
+            } else {
+                document.getElementById('wordInput').value = wordsToAdd;
+            }
+        }
+
+        let words = [];
+        let shuffledWords = [];
+        let currentWordIndex = 0;
+        let correctAnswers = 0;
+
+        function startQuiz() {
+            const inputText = document.getElementById('wordInput').value.trim();
+            if (!inputText) return alert('请输入单词或词组');
+
+            words = inputText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+
+            // Filter out invalid lines and split into pairs
+            words = words.filter(line => line.includes(':')).map(line => line.split(':').map(part => part.trim()));
+
+            if (words.length === 0) return alert('请输入有效的单词或词组（格式为 英文:中文）');
+
+            shuffleArray(words);
+            shuffledWords = [...words];
+            currentWordIndex = 0;
+            correctAnswers = 0;
+
+            document.getElementById('wordInput').style.display = 'none';
+            document.getElementById('startButtonContainer').style.display = 'none';
+            document.getElementById('unitSelectionContainer').style.display = 'none'; // Hide unit selection container
+            document.getElementById('quizContainer').style.display = 'flex';
+
+            showNextQuestion();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function showNextQuestion() {
+            if (currentWordIndex >= shuffledWords.length) {
+                endQuiz();
+                return;
+            }
+
+            const [english, chinese] = shuffledWords[currentWordIndex];
+            const randomChoice = Math.random() < 0.5 ? english : chinese;
+            document.getElementById('question').innerText = `请翻译: ${randomChoice}`;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('result').innerText = '';
+        }
+
+        function checkAnswer() {
+            const answer = document.getElementById('answerInput').value.trim();
+            const [english, chinese] = shuffledWords[currentWordIndex];
+
+            let isCorrect = false;
+            if (document.getElementById('question').innerText.includes(english)) {
+                isCorrect = answer.toLowerCase() === chinese.toLowerCase();
+            } else if (document.getElementById('question').innerText.includes(chinese)) {
+                isCorrect = answer.toLowerCase() === english.toLowerCase();
+            }
+
+            if (isCorrect) {
+                document.getElementById('result').innerText = '正确 ✔️';
+                document.getElementById('result').classList.add('correct');
+                correctAnswers++;
+            } else {
+                document.getElementById('result').innerText = `错误 ❌ 正确答案是: ${english} -> ${chinese}`;
+                document.getElementById('result').classList.add('incorrect');
+            }
+
+            setTimeout(() => {
+                document.getElementById('result').innerText = '';
+                document.getElementById('result').classList.remove('correct', 'incorrect');
+                currentWordIndex++;
+                showNextQuestion();
+            }, 1500);
+        }
+
+        function endQuiz() {
+            const accuracy = ((correctAnswers / shuffledWords.length) * 100).toFixed(2);
+            document.getElementById('question').innerText = `测试结束！正确率: ${accuracy}%`;
+            document.getElementById('answerInput').style.display = 'none';
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('restartBtn').style.display = 'block';
+        }
+
+        function restartQuiz() {
+            document.getElementById('wordInput').style.display = 'block';
+            document.getElementById('startButtonContainer').style.display = 'block';
+            document.getElementById('unitSelectionContainer').style.display = 'block'; // Show unit selection container
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('question').innerText = '';
+            document.getElementById('answerInput').value = ''; // Ensure answerInput is cleared
+            document.getElementById('answerInput').style.display = 'block'; // Show answerInput
+            document.getElementById('submitBtn').style.display = 'block'; // Show submitBtn
+            document.getElementById('result').innerText = '';
+            document.getElementById('restartBtn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
