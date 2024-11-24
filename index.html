@@ -82,6 +82,15 @@
         #unitSelectionContainer {
             margin-bottom: 10px;
         }
+        #questionNumber {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        #question {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -102,6 +111,7 @@
             <button onclick="startQuiz()">开始测试</button>
         </div>
         <div id="quizContainer" style="display:none;">
+            <p id="questionNumber"></p>
             <p id="question"></p>
             <input type="text" id="answerInput"><br>
             <button id="submitBtn" onclick="checkAnswer()">提交</button>
@@ -158,13 +168,19 @@
                 "pround:骄傲的"
             ],
             unit2: [
-                
+                "dog:狗",
+                "cat:猫",
+                "bird:鸟"
             ],
             unit3: [
-                
+                "red:红色",
+                "blue:蓝色",
+                "green:绿色"
             ],
             unit4: [
-                
+                "sun:太阳",
+                "moon:月亮",
+                "star:星星"
             ]
         };
 
@@ -185,6 +201,8 @@
         let shuffledWords = [];
         let currentWordIndex = 0;
         let correctAnswers = 0;
+        let consecutiveCorrect = 0;
+        let consecutiveIncorrect = 0;
 
         function startQuiz() {
             const inputText = document.getElementById('wordInput').value.trim();
@@ -201,6 +219,8 @@
             shuffledWords = [...words];
             currentWordIndex = 0;
             correctAnswers = 0;
+            consecutiveCorrect = 0;
+            consecutiveIncorrect = 0;
 
             document.getElementById('wordInput').style.display = 'none';
             document.getElementById('startButtonContainer').style.display = 'none';
@@ -225,9 +245,12 @@
 
             const [english, chinese] = shuffledWords[currentWordIndex];
             const randomChoice = Math.random() < 0.5 ? english : chinese;
-            document.getElementById('question').innerText = `请翻译: ${randomChoice}`;
+            document.getElementById('question').innerText = randomChoice;
             document.getElementById('answerInput').value = '';
             document.getElementById('result').innerText = '';
+
+            // Update question number
+            document.getElementById('questionNumber').innerText = `第 ${currentWordIndex + 1} / 共 ${shuffledWords.length} 个`;
         }
 
         function checkAnswer() {
@@ -242,11 +265,29 @@
             }
 
             if (isCorrect) {
-                document.getElementById('result').innerText = '正确 ✔️';
-                document.getElementById('result').classList.add('correct');
                 correctAnswers++;
+                consecutiveCorrect++;
+                consecutiveIncorrect = 0;
+
+                if (consecutiveCorrect === 5) {
+                    document.getElementById('result').innerText = '太棒了！继续加油！ ✔️';
+                } else if (consecutiveCorrect === 10) {
+                    document.getElementById('result').innerText = '你真是天才！ 🌟';
+                } else {
+                    document.getElementById('result').innerText = '正确 ✔️';
+                }
+
+                document.getElementById('result').classList.add('correct');
             } else {
-                document.getElementById('result').innerText = `错误 ❌ 正确答案是: ${english} -> ${chinese}`;
+                consecutiveIncorrect++;
+                consecutiveCorrect = 0;
+
+                if (consecutiveIncorrect >= 2) {
+                    document.getElementById('result').innerText = `别灰心，继续努力！ ❌ 正确答案是: ${english} -> ${chinese}`;
+                } else {
+                    document.getElementById('result').innerText = `错误 ❌ 正确答案是: ${english} -> ${chinese}`;
+                }
+
                 document.getElementById('result').classList.add('incorrect');
             }
 
@@ -260,10 +301,23 @@
 
         function endQuiz() {
             const accuracy = ((correctAnswers / shuffledWords.length) * 100).toFixed(2);
-            document.getElementById('question').innerText = `测试结束！正确率: ${accuracy}%`;
+            let message = '';
+
+            if (accuracy < 60) {
+                message = `测试结束！正确率: ${accuracy}%。别灰心，继续努力！`;
+            } else if (accuracy >= 60 && accuracy < 80) {
+                message = `测试结束！正确率: ${accuracy}%。加油，你可以更棒！`;
+            } else if (accuracy >= 80 && accuracy < 90) {
+                message = `测试结束！正确率: ${accuracy}%。真不错，继续保持！`;
+            } else {
+                message = `测试结束！正确率: ${accuracy}%。非常好！`;
+            }
+
+            document.getElementById('question').innerText = message;
             document.getElementById('answerInput').style.display = 'none';
             document.getElementById('submitBtn').style.display = 'none';
             document.getElementById('restartBtn').style.display = 'block';
+            document.getElementById('questionNumber').innerText = ''; // Clear question number
         }
 
         function restartQuiz() {
@@ -277,6 +331,7 @@
             document.getElementById('submitBtn').style.display = 'block'; // Show submitBtn
             document.getElementById('result').innerText = '';
             document.getElementById('restartBtn').style.display = 'none';
+            document.getElementById('questionNumber').innerText = ''; // Clear question number
         }
     </script>
 </body>
