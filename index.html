@@ -35,6 +35,14 @@
             font-size: 20px;
             color: #555;
         }
+        .settings-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #555;
+        }
         textarea {
             width: calc(100% - 22px);
             padding: 10px;
@@ -67,6 +75,10 @@
             color: white;
         }
         button#luckyBtn {
+            background-color: #28a745;
+            color: white;
+        }
+        button#savePrizesBtn {
             background-color: #28a745;
             color: white;
         }
@@ -118,11 +130,47 @@
             font-size: 16px;
             font-weight: bold;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .prize-input {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <span class="refresh-icon" onclick="location.reload()">&#8635;</span>
+        <span class="settings-icon" onclick="openModal()">&#9881;</span>
         <h2>noai背单词</h2>
         <div id="unitSelectionContainer">
             <select id="unitSelect" onchange="updateWords()">
@@ -158,6 +206,18 @@
             <div id="result" class="result"></div>
             <button id="restartBtn" onclick="restartQuiz()" style="display:none;">重新开始</button>
             <button id="luckyBtn" onclick="window.location.href='https://icloudbi.github.io/words/lucky.html'" style="display:none;">抽奖游戏</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>设置奖品名称</h2>
+            <div id="prizeInputs">
+                <!-- Prize inputs will be dynamically added here -->
+            </div>
+            <button id="savePrizesBtn" onclick="savePrizes()">保存</button>
         </div>
     </div>
 
@@ -463,6 +523,7 @@
         };
 
         let selectedUnitName = '';
+        let prizes = [];
 
         function updateWords() {
             const selectedUnit = document.getElementById('unitSelect').value;
@@ -655,6 +716,50 @@
             document.getElementById('questionNumber').innerText = ''; // Clear question number
             document.getElementById('currentUnit').innerText = ''; // Clear current unit
         }
+
+        function openModal() {
+            loadPrizes();
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        function createPrizeInputs() {
+            const prizeInputsDiv = document.getElementById('prizeInputs');
+            prizeInputsDiv.innerHTML = ''; // Clear existing inputs
+
+            for (let i = 0; i < 8; i++) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'prize-input';
+                input.placeholder = `奖品${i + 1}`;
+                input.value = prizes[i] || '';
+                prizeInputsDiv.appendChild(input);
+            }
+        }
+
+        function savePrizes() {
+            const inputs = document.querySelectorAll('.prize-input');
+            prizes = Array.from(inputs).map(input => input.value.trim());
+            localStorage.setItem('prizes', JSON.stringify(prizes));
+            closeModal();
+        }
+
+        function loadPrizes() {
+            const storedPrizes = localStorage.getItem('prizes');
+            if (storedPrizes) {
+                prizes = JSON.parse(storedPrizes);
+            } else {
+                prizes = ["未中奖", "看一部电影", "未中奖", "一个冰淇淋", "5元小礼品", "一份小零食", "未中奖", "一张免学券"];
+            }
+            createPrizeInputs();
+        }
+
+        window.onload = () => {
+            loadPrizes();
+        };
     </script>
 </body>
 </html>
