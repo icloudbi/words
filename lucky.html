@@ -47,8 +47,12 @@
             font-size: 1.5em;
             margin-top: 20px;
         }
-        #debugMode {
+        #luckyCodeInput {
             margin-top: 20px;
+            display: none; /* 默认隐藏 */
+        }
+        #luckyCodeSubmit {
+            margin-left: 10px;
         }
         #title {
             font-size: 2em;
@@ -71,30 +75,65 @@
         <div class="button">玩游戏10分钟</div>
     </div>
     <div id="result"></div>
-    <label id="debugMode">
-        <input type="checkbox" id="debugCheckbox"> 调试模式（无限抽奖）
-    </label>
+    <div id="luckyCodeInput">
+        <input type="text" id="codeInput" placeholder="请输入幸运码">
+        <button id="luckyCodeSubmit">提交</button>
+    </div>
 
     <script>
         const buttons = document.querySelectorAll('.button');
         const startButton = document.getElementById('startButton');
         const resultDiv = document.getElementById('result');
-        const debugCheckbox = document.getElementById('debugCheckbox');
+        const codeInput = document.getElementById('codeInput');
+        const luckyCodeSubmit = document.getElementById('luckyCodeSubmit');
+        const luckyCodeInputContainer = document.getElementById('luckyCodeInput');
 
         let spinning = false;
 
-        function canSpin() {
-            if (debugCheckbox.checked) return true;
+        function getCurrentLuckyCode() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            return hours + minutes;
+        }
 
+        function canSpin() {
             const lastSpinDate = localStorage.getItem('lastSpinDate');
+            const spinCount = parseInt(localStorage.getItem('spinCount'), 10) || 0;
+
             if (lastSpinDate) {
                 const today = new Date().toDateString();
-                if (today === lastSpinDate) {
+                if (today === lastSpinDate && spinCount >= 1) {
                     resultDiv.textContent = '您今天已经抽过奖了，请明天再来！';
+                    showLuckyCodeInput();
                     return false;
                 }
             }
             return true;
+        }
+
+        function showLuckyCodeInput() {
+            luckyCodeInputContainer.style.display = 'block';
+            codeInput.value = ''; // 清空输入框
+            codeInput.placeholder = `请输入幸运码`;
+        }
+
+        function hideLuckyCodeInput() {
+            luckyCodeInputContainer.style.display = 'none';
+        }
+
+        function addExtraSpin() {
+            const enteredCode = codeInput.value.trim();
+            const currentLuckyCode = getCurrentLuckyCode();
+
+            if (enteredCode === currentLuckyCode) {
+                localStorage.setItem('spinCount', 0); // Reset spin count
+                resultDiv.textContent = '恭喜您获得了额外的抽奖机会！';
+                hideLuckyCodeInput();
+                codeInput.value = '';
+            } else {
+                resultDiv.textContent = '幸运码错误，请重新输入。';
+            }
         }
 
         function spinWheel() {
@@ -120,9 +159,9 @@
                     } else {
                         resultDiv.textContent = `恭喜您获得：${prizeText}`;
                     }
-                    if (!debugCheckbox.checked) {
-                        localStorage.setItem('lastSpinDate', new Date().toDateString());
-                    }
+                    const today = new Date().toDateString();
+                    localStorage.setItem('lastSpinDate', today);
+                    localStorage.setItem('spinCount', (parseInt(localStorage.getItem('spinCount'), 10) || 0) + 1);
                 } else {
                     currentIndex = (currentIndex + 1) % prizeButtons.length;
                 }
@@ -130,6 +169,7 @@
         }
 
         startButton.addEventListener('click', spinWheel);
+        luckyCodeSubmit.addEventListener('click', addExtraSpin);
     </script>
 </body>
 </html>
