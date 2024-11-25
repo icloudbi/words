@@ -14,6 +14,26 @@
             font-family: Arial, sans-serif;
             flex-direction: column;
         }
+        .header {
+            width: 350px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .header h1 {
+            text-align: center;
+            font-size: 2em;
+            color: #FFA500; /* 橘色 */
+        }
+        .config-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: #FFA500;
+        }
         .wheel {
             display: grid;
             grid-template-columns: repeat(3, 100px);
@@ -30,6 +50,9 @@
             border: 2px solid #ccc;
             cursor: pointer;
             transition: background-color 0.3s;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .button:hover {
             background-color: #ddd;
@@ -41,43 +64,135 @@
             cursor: default;
             background-color: red;
             color: white;
+            border: none;
+            box-shadow: none;
         }
         #result {
             text-align: center;
             font-size: 1.5em;
             margin-top: 20px;
+            color: #FFA500;
         }
         #luckyCodeInput {
             margin-top: 20px;
             display: none; /* 默认隐藏 */
         }
-        #luckyCodeSubmit {
-            margin-left: 10px;
+        #codeInput {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        #title {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: #FFA500; /* 橘色 */
+        #luckyCodeSubmit {
+            padding: 10px 20px;
+            border: none;
+            background-color: #FFA500;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+        #luckyCodeSubmit:hover {
+            background-color: #E67E22;
+        }
+        #configModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .prizeInput {
+            padding: 10px;
+            width: calc(100% - 22px); /* Adjusted to fit within modal */
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #savePrizes {
+            padding: 10px 20px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            width: 100%; /* Full width button */
+        }
+        #savePrizes:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
-    <div id="title">幸运大抽奖</div>
+    <div class="header">
+        <h1 id="title">幸运大抽奖</h1>
+        <button id="configButton" class="config-button">&#9881;</button>
+    </div>
     <div class="wheel">
         <div class="button">未中奖</div>
         <div class="button">看一部电影</div>
         <div class="button">未中奖</div>
-        <div class="button">一根冰淇淋</div>
+        <div class="button">一个冰淇淋</div>
         <div id="startButton" class="button">开始抽奖</div>
         <div class="button">5元小礼品</div>
         <div class="button">一份小零食</div>
         <div class="button">未中奖</div>
-        <div class="button">一张免读券</div>
+        <div class="button">一张免学券</div>
     </div>
     <div id="result"></div>
     <div id="luckyCodeInput">
         <input type="text" id="codeInput" placeholder="请输入幸运码">
         <button id="luckyCodeSubmit">提交</button>
+    </div>
+
+    <!-- The Modal -->
+    <div id="configModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>配置奖品</h2>
+            <div id="prizeInputs">
+                <input type="text" class="prizeInput" placeholder="奖品1"><br>
+                <input type="text" class="prizeInput" placeholder="奖品2"><br>
+                <input type="text" class="prizeInput" placeholder="奖品3"><br>
+                <input type="text" class="prizeInput" placeholder="奖品4"><br>
+                <input type="text" class="prizeInput" placeholder="奖品5"><br>
+                <input type="text" class="prizeInput" placeholder="奖品6"><br>
+                <input type="text" class="prizeInput" placeholder="奖品7"><br>
+                <input type="text" class="prizeInput" placeholder="奖品8"><br>
+            </div>
+            <button id="savePrizes">保存</button>
+        </div>
     </div>
 
     <script>
@@ -87,6 +202,11 @@
         const codeInput = document.getElementById('codeInput');
         const luckyCodeSubmit = document.getElementById('luckyCodeSubmit');
         const luckyCodeInputContainer = document.getElementById('luckyCodeInput');
+        const configButton = document.getElementById('configButton');
+        const configModal = document.getElementById('configModal');
+        const closeBtn = document.querySelector(".close");
+        const savePrizesBtn = document.getElementById('savePrizes');
+        const prizeInputs = document.querySelectorAll('.prizeInput');
 
         let spinning = false;
 
@@ -115,7 +235,7 @@
         function showLuckyCodeInput() {
             luckyCodeInputContainer.style.display = 'block';
             codeInput.value = ''; // 清空输入框
-            codeInput.placeholder = `请输入幸运码`;
+            codeInput.placeholder = `请输入幸运码 (${getCurrentLuckyCode()})`;
         }
 
         function hideLuckyCodeInput() {
@@ -167,6 +287,65 @@
                 }
             }, 100);
         }
+
+        function loadPrizesFromLocalStorage() {
+            const prizes = JSON.parse(localStorage.getItem('prizes'));
+            if (prizes && prizes.length === 8) {
+                buttons.forEach((button, index) => {
+                    if (index < 4) {
+                        button.textContent = prizes[index];
+                    } else if (index > 4) {
+                        button.textContent = prizes[index - 1];
+                    }
+                });
+            } else {
+                alert('请先配置奖品名称。');
+            }
+        }
+
+        function savePrizesToLocalStorage() {
+            const prizes = [];
+            prizeInputs.forEach(input => {
+                prizes.push(input.value.trim());
+            });
+
+            if (prizes.every(prize => prize)) {
+                localStorage.setItem('prizes', JSON.stringify(prizes));
+                alert('奖品名称已保存！');
+                configModal.style.display = 'none';
+                loadPrizesFromLocalStorage();
+            } else {
+                alert('所有奖品名称不能为空！');
+            }
+        }
+
+        function loadPrizesIntoModal() {
+            const prizes = JSON.parse(localStorage.getItem('prizes')) || Array(8).fill('');
+            prizeInputs.forEach((input, index) => {
+                input.value = prizes[index];
+            });
+        }
+
+        window.onload = () => {
+            loadPrizesFromLocalStorage();
+        };
+
+        configButton.onclick = () => {
+            configModal.style.display = 'block';
+            loadPrizesIntoModal(); // Load prizes from local storage into modal inputs
+        };
+
+        closeBtn.onclick = () => {
+            configModal.style.display = 'none';
+        };
+
+        window.onclick = (event) => {
+            if (event.target == configModal) {
+                configModal.style.display = 'none';
+            }
+        };
+
+        savePrizesBtn.onclick = savePrizesToLocalStorage;
 
         startButton.addEventListener('click', spinWheel);
         luckyCodeSubmit.addEventListener('click', addExtraSpin);
