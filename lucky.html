@@ -299,17 +299,33 @@
                     }
                 });
             } 
+            else {
+                // Default prizes from button texts
+                const defaultPrizes = [
+                    buttons[0].textContent,
+                    buttons[1].textContent,
+                    buttons[2].textContent,
+                    buttons[3].textContent,
+                    buttons[5].textContent,
+                    buttons[6].textContent,
+                    buttons[7].textContent,
+                    buttons[8].textContent
+                ];
+                savePrizesToLocalStorage(defaultPrizes);
+                loadPrizesFromLocalStorage();
+            }
         }
 
-        function savePrizesToLocalStorage() {
-            const prizes = [];
-            prizeInputs.forEach(input => {
-                prizes.push(input.value.trim());
-            });
+        function savePrizesToLocalStorage(prizes) {
+            if (!prizes) {
+                prizes = [];
+                prizeInputs.forEach(input => {
+                    prizes.push(input.value.trim());
+                });
+            }
 
             if (prizes.every(prize => prize)) {
                 localStorage.setItem('prizes', JSON.stringify(prizes));
-                alert('奖品名称已保存！');
                 configModal.style.display = 'none';
                 loadPrizesFromLocalStorage();
             } else {
