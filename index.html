@@ -7,12 +7,12 @@
     <style>
         body {
             background-color: #f0f0f0;
+            margin: 0;
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
         }
         .container {
             text-align: center;
@@ -21,7 +21,11 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 300px;
+            min-height: 90vh; /* Ensure the container takes at least 90% of the viewport height */
             position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .refresh-icon {
             position: absolute;
@@ -38,6 +42,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             resize: vertical;
+            flex-grow: 1; /* Allow textarea to grow and fill available space */
         }
         input[type="text"] {
             width: calc(100% - 22px);
@@ -79,6 +84,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            flex-grow: 1;
         }
         #startButtonContainer {
             display: flex;
@@ -121,12 +127,12 @@
         <div id="unitSelectionContainer">
             <select id="unitSelect" onchange="updateWords()">
                 <option value="">请选择单元</option>
-                <option value="unit1">7年级上册Unit1</option>
-                <option value="unit2">7年级上册Unit2</option>
-                <option value="unit3">7年级上册Unit3</option>
-                <option value="unit4">7年级上册Unit4</option>
-                <option value="unit5">7年级上册Unit5</option>
-                <option value="unit6">7年级上册Unit6</option>
+                <option value="unit1">7年级Unit1</option>
+                <option value="unit2">7年级Unit2</option>
+                <option value="unit3">7年级Unit3</option>
+                <option value="unit4">7年级Unit4</option>
+                <option value="unit5">7年级Unit5</option>
+                <option value="unit6">7年级Unit6</option>
                 <option value="phrase1125">11月25日短语</option>
                 <option value="custom">自定义单词</option>
             </select>
@@ -136,7 +142,7 @@
             <label for="modeSelect">选择模式:</label>
             <select id="modeSelect">
                 <option value="chiToEng">中翻英</option>
-                <option value="engToChi">英翻中</option>
+                <!--<option value="engToChi">英翻中</option>-->
                 <option value="mixed">中英混合</option>
             </select>
         </div>
@@ -508,7 +514,7 @@
             document.getElementById('modeSelectionContainer').style.display = 'none'; // Hide mode selection container
             document.getElementById('quizContainer').style.display = 'flex';
 
-            document.getElementById('currentUnit').innerText = `测试内容: ${selectedUnitName}`;
+            document.getElementById('currentUnit').innerText = `当前单元: ${selectedUnitName}`;
 
             showNextQuestion();
         }
