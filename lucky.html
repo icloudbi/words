@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽奖游戏</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+        }
+        .wheel {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .button {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #ddd;
+        }
+        .highlight {
+            background-color: #ffcc00;
+        }
+        #startButton {
+            cursor: default;
+            background-color: red;
+            color: white;
+        }
+        #result {
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        #debugMode {
+            margin-top: 20px;
+        }
+        #title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #FFA500; /* 橘色 */
+        }
+    </style>
+</head>
+<body>
+    <div id="title">幸运大抽奖</div>
+    <div class="wheel">
+        <div class="button">未中奖</div>
+        <div class="button">看一部电影</div>
+        <div class="button">未中奖</div>
+        <div class="button">冰淇淋一根</div>
+        <div id="startButton" class="button">开始抽奖</div>
+        <div class="button">5元小礼品</div>
+        <div class="button">一份小零食</div>
+        <div class="button">未中奖</div>
+        <div class="button">玩游戏10分钟</div>
+    </div>
+    <div id="result"></div>
+    <label id="debugMode">
+        <input type="checkbox" id="debugCheckbox"> 调试模式（无限抽奖）
+    </label>
+
+    <script>
+        const buttons = document.querySelectorAll('.button');
+        const startButton = document.getElementById('startButton');
+        const resultDiv = document.getElementById('result');
+        const debugCheckbox = document.getElementById('debugCheckbox');
+
+        let spinning = false;
+
+        function canSpin() {
+            if (debugCheckbox.checked) return true;
+
+            const lastSpinDate = localStorage.getItem('lastSpinDate');
+            if (lastSpinDate) {
+                const today = new Date().toDateString();
+                if (today === lastSpinDate) {
+                    resultDiv.textContent = '您今天已经抽过奖了，请明天再来！';
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function spinWheel() {
+            if (spinning || !canSpin()) return;
+            spinning = true;
+
+            // Exclude the middle button (index 4)
+            const prizeButtons = Array.from(buttons).filter((_, index) => index !== 4);
+            let currentIndex = Math.floor(Math.random() * prizeButtons.length); // Random starting point
+            let times = Math.floor(Math.random() * 20) + 40; // Random number of spins
+
+            const interval = setInterval(() => {
+                buttons.forEach(button => button.classList.remove('highlight'));
+                prizeButtons[currentIndex].classList.add('highlight');
+
+                times--;
+                if (times === 0) {
+                    clearInterval(interval);
+                    spinning = false;
+                    const prizeText = prizeButtons[currentIndex].textContent;
+                    if (prizeText === '未中奖') {
+                        resultDiv.textContent = '很遗憾，未中奖，下次再来吧！';
+                    } else {
+                        resultDiv.textContent = `恭喜您获得：${prizeText}`;
+                    }
+                    if (!debugCheckbox.checked) {
+                        localStorage.setItem('lastSpinDate', new Date().toDateString());
+                    }
+                } else {
+                    currentIndex = (currentIndex + 1) % prizeButtons.length;
+                }
+            }, 100);
+        }
+
+        startButton.addEventListener('click', spinWheel);
+    </script>
+</body>
+</html>
