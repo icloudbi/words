@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>noai背单词</title>
+    <title>背单词页面</title>
     <style>
         body {
             background-color: #f0f0f0;
@@ -21,6 +21,15 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 300px;
+            position: relative;
+        }
+        .refresh-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #555;
         }
         textarea {
             width: calc(100% - 22px);
@@ -98,13 +107,19 @@
             font-weight: bold;
             margin-bottom: 10px;
         }
+        #currentUnit {
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>noai背单词</h2>
+        <span class="refresh-icon" onclick="location.reload()">&#8635;</span>
+        <h2>背单词</h2>
         <div id="unitSelectionContainer">
-            <select id="unitSelect" onchange="updateWordInput()">
+            <select id="unitSelect" onchange="updateWords()">
                 <option value="">请选择单元</option>
                 <option value="unit1">7年级Unit1</option>
                 <option value="unit2">7年级Unit2</option>
@@ -121,7 +136,7 @@
             <label for="modeSelect">选择模式:</label>
             <select id="modeSelect">
                 <option value="chiToEng">中翻英</option>
-                <!--<option value="engToChi">英翻中</option>-->
+                <option value="engToChi">英翻中</option>
                 <option value="mixed">中英混合</option>
             </select>
         </div>
@@ -129,6 +144,7 @@
             <button onclick="startQuiz()">开始测试</button>
         </div>
         <div id="quizContainer" style="display:none;">
+            <p id="currentUnit"></p>
             <p id="questionNumber"></p>
             <p id="question"></p>
             <input type="text" id="answerInput"><br>
@@ -440,19 +456,24 @@
             ]
         };
 
-        function updateWordInput() {
+        let selectedUnitName = '';
+
+        function updateWords() {
             const selectedUnit = document.getElementById('unitSelect').value;
             const wordInput = document.getElementById('wordInput');
 
             if (selectedUnit === 'custom') {
                 wordInput.value = '';
                 wordInput.readOnly = false;
-            } else if (selectedUnit) {
+                selectedUnitName = '自定义单词';
+            } else if (wordGroups[selectedUnit]) {
                 wordInput.value = wordGroups[selectedUnit].join('\n');
                 wordInput.readOnly = true;
+                selectedUnitName = document.getElementById('unitSelect').options[document.getElementById('unitSelect').selectedIndex].text;
             } else {
                 wordInput.value = '';
                 wordInput.readOnly = true;
+                selectedUnitName = '';
             }
         }
 
@@ -486,6 +507,8 @@
             document.getElementById('unitSelectionContainer').style.display = 'none'; // Hide unit selection container
             document.getElementById('modeSelectionContainer').style.display = 'none'; // Hide mode selection container
             document.getElementById('quizContainer').style.display = 'flex';
+
+            document.getElementById('currentUnit').innerText = `测试内容: ${selectedUnitName}`;
 
             showNextQuestion();
         }
@@ -599,8 +622,10 @@
         }
 
         function restartQuiz() {
+            document.getElementById('unitSelect').value = '';
             document.getElementById('wordInput').value = '';
             document.getElementById('wordInput').readOnly = true;
+            document.getElementById('modeSelect').value = 'chiToEng'; // Default mode set to 中翻英
             document.getElementById('wordInput').style.display = 'block';
             document.getElementById('startButtonContainer').style.display = 'block';
             document.getElementById('unitSelectionContainer').style.display = 'block'; // Show unit selection container
@@ -614,6 +639,7 @@
             document.getElementById('restartBtn').style.display = 'none';
             document.getElementById('luckyBtn').style.display = 'none';
             document.getElementById('questionNumber').innerText = ''; // Clear question number
+            document.getElementById('currentUnit').innerText = ''; // Clear current unit
         }
     </script>
 </body>
