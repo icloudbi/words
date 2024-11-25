@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>noai背单词</title>
+    <title>背单词页面</title>
     <style>
         body {
             background-color: #f0f0f0;
@@ -123,7 +123,7 @@
 <body>
     <div class="container">
         <span class="refresh-icon" onclick="location.reload()">&#8635;</span>
-        <h2>noai背单词</h2>
+        <h2>背单词</h2>
         <div id="unitSelectionContainer">
             <select id="unitSelect" onchange="updateWords()">
                 <option value="">请选择内容</option>
@@ -481,6 +481,11 @@
                 wordInput.readOnly = true;
                 selectedUnitName = '';
             }
+
+            // Automatically add line numbers
+            const lines = wordInput.value.split('\n');
+            const numberedLines = lines.map((line, index) => `${index + 1}. ${line}`);
+            wordInput.value = numberedLines.join('\n');
         }
 
         let words = [];
@@ -495,6 +500,9 @@
             if (!inputText) return alert('请输入单词或词组');
 
             words = inputText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+
+            // Remove line numbers before processing
+            words = words.map(line => line.replace(/^\d+\.\s*/, ''));
 
             // Filter out invalid lines and split into pairs
             words = words.filter(line => line.includes(':')).map(line => line.split(':').map(part => part.trim()));
