@@ -216,6 +216,7 @@
     <script>
         let selectedUnitName = '';
         let prizes = [];
+        let highestAccuracies = {};
 
         async function loadUnits() {
             try {
@@ -230,10 +231,15 @@
                     if (name && url) {
                         const option = document.createElement('option');
                         option.value = url;
-                        option.textContent = name;
+                        option.textContent = getUnitDisplayText(name);
                         unitSelect.appendChild(option);
                     }
                 });
+                // Load highest accuracies from localStorage
+                const storedAccuracies = localStorage.getItem('highestAccuracies');
+                if (storedAccuracies) {
+                    highestAccuracies = JSON.parse(storedAccuracies);
+                }
             } catch (error) {
                 console.error(error);
                 alert('无法加载单元列表，请检查 list.txt 文件是否存在并正确配置。');
@@ -420,6 +426,21 @@
             }
 
             document.getElementById('questionNumber').innerText = ''; // Clear question number
+
+            // Update highest accuracy for the current unit
+            if (!highestAccuracies[selectedUnitName] || parseFloat(highestAccuracies[selectedUnitName]) < parseFloat(accuracy)) {
+                highestAccuracies[selectedUnitName] = accuracy;
+                localStorage.setItem('highestAccuracies', JSON.stringify(highestAccuracies));
+
+                // Update the unit display in the dropdown
+                const unitOptions = document.getElementById('unitSelect').options;
+                for (let i = 0; i < unitOptions.length; i++) {
+                    if (unitOptions[i].textContent.startsWith(selectedUnitName)) {
+                        unitOptions[i].textContent = getUnitDisplayText(unitOptions[i].textContent.split(' ')[0]);
+                        break;
+                    }
+                }
+            }
         }
 
         function restartQuiz() {
@@ -483,6 +504,11 @@
             createPrizeInputs();
         }
 
+        function getUnitDisplayText(unitName) {
+            const highestAccuracy = highestAccuracies[unitName] || '0.0';
+            return `${unitName} (${highestAccuracy}%)`;
+        }
+        
         window.onload = () => {
             loadUnits(); // Load units from list.txt
             loadPrizes();
