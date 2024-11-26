@@ -218,8 +218,17 @@
         let prizes = [];
         let highestAccuracies = {};
 
+        async function loadHighestAccuracies() {
+            const storedAccuracies = localStorage.getItem('highestAccuracies');
+            if (storedAccuracies) {
+                highestAccuracies = JSON.parse(storedAccuracies);
+            }
+        }
+
         async function loadUnits() {
             try {
+                await loadHighestAccuracies(); // Load highest accuracies first
+                
                 const response = await fetch('https://raw.githubusercontent.com/icloudbi/words/main/list.txt');
                 if (!response.ok) throw new Error('无法加载 list.txt 文件');
                 const data = await response.text();
@@ -235,11 +244,6 @@
                         unitSelect.appendChild(option);
                     }
                 });
-                // Load highest accuracies from localStorage
-                const storedAccuracies = localStorage.getItem('highestAccuracies');
-                if (storedAccuracies) {
-                    highestAccuracies = JSON.parse(storedAccuracies);
-                }
             } catch (error) {
                 console.error(error);
                 alert('无法加载单元列表，请检查 list.txt 文件是否存在并正确配置。');
