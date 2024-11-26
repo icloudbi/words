@@ -1,0 +1,43 @@
+curious:好奇的
+magazine:杂志
+test:测试
+windsurf:做帆板运动
+feeling:感受
+brave:勇敢的
+challenge:挑战
+machine:机器
+traffic:交通
+board:板
+print:打印
+printing:印刷
+improve:改善
+camp:露营
+grow:生长
+sticker:贴纸
+power:驱动
+renewable:可再生的
+discuss:讨论
+everywhere:到处
+impossible:不可能的
+solar panel:太阳能电池板
+solar cell:太阳能电池
+holder:支托之物
+fail:失败
+pizza:比萨饼
+burn:烫伤
+pan:平底锅
+troublesome:令人烦恼的
+luckily:幸好
+excitedly:兴奋地
+layer:层
+separate:分离
+countless:无数的
+succeed:成功
+hopefully:有希望地
+stick:粘贴
+device:仪器
+away:离开
+take away:拿走
+creative:有创造力的
+handle:把手
+pround:骄傲的

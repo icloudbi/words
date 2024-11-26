@@ -1,0 +1,41 @@
+camera:照相机
+speaker:扬声器
+thermostat:温控器
+itself:它自己
+alarm:警报器
+stranger:陌生人 
+lock:锁
+explore:探索
+rock:轻轻摇晃
+shower:淋浴
+mode:模式
+text message:短信息
+bedroom:卧室
+bathroom:浴室
+suggest:建议
+protect:保护
+review:评论
+review:复习
+heating:供暖
+guide:指导
+personal:个人的
+owner:主人
+alarm clock:闹钟
+keep track of:追踪
+schedule:日程安排
+health care:医疗服务
+order:订购
+signal:发信号
+sense:意识到
+manage:管理
+remind:提醒
+produce:生产
+store:保存
+sore:疼痛的
+throat:嗓子
+understand:理解
+already:已经
+depend:依靠
+depend on:依赖
+oven:烤箱
+truly:确实地
