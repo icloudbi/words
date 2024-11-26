@@ -229,7 +229,7 @@
             try {
                 await loadHighestAccuracies(); // Load highest accuracies first
                 
-                const response = await fetch('https://raw.githubusercontent.com/icloudbi/words/main/list.txt');
+                const response = await fetch('https://icloudbi.github.io/words/list.txt');
                 if (!response.ok) throw new Error('无法加载 list.txt 文件');
                 const data = await response.text();
                 const lines = data.trim().split('\n');
