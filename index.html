@@ -174,7 +174,7 @@
         <h2>noai背单词</h2>
         <div id="unitSelectionContainer">
             <select id="unitSelect" onchange="updateWords()">
-                <option value="">请选择单元</option>
+                <option value="">请选择单词组</option>
             </select>
         </div>
         <textarea id="wordInput" rows="5" placeholder="单词或词组（每行一个，格式为 英文:中文）" readonly></textarea><br>
@@ -249,6 +249,9 @@
                 wordInput.readOnly = true;
                 selectedUnitName = '';
             } else {
+                wordInput.value = '正在加载中...';
+                wordInput.readOnly = true;
+                
                 fetch(selectedUrl)
                     .then(response => {
                         if (!response.ok) throw new Error(`无法加载 ${selectedUrl}`);
@@ -256,19 +259,14 @@
                     })
                     .then(data => {
                         wordInput.value = addLineNumbers(data.trim());
-                        wordInput.readOnly = true;
                         selectedUnitName = document.getElementById('unitSelect').options[document.getElementById('unitSelect').selectedIndex].text;
                     })
                     .catch(error => {
                         console.error(error);
                         alert('无法加载单词数据文件，请检查 URL 是否正确。');
+                        wordInput.value = '';
                     });
             }
-
-            // Automatically add line numbers
-            const lines = wordInput.value.split('\n');
-            const numberedLines = lines.map((line, index) => `${index + 1}. ${line}`);
-            wordInput.value = numberedLines.join('\n');
         }
         
         function addLineNumbers(text) {
