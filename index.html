@@ -174,15 +174,7 @@
         <h2>noai背单词</h2>
         <div id="unitSelectionContainer">
             <select id="unitSelect" onchange="updateWords()">
-                <option value="">请选择内容</option>
-                <option value="unit1">7年级上册Unit1</option>
-                <option value="unit2">7年级上册Unit2</option>
-                <option value="unit3">7年级上册Unit3</option>
-                <option value="unit4">7年级上册Unit4</option>
-                <option value="unit5">7年级上册Unit5</option>
-                <option value="unit6">7年级上册Unit6</option>
-                <option value="ssp1125">SSP11月25日短语</option>
-                <option value="custom">自定义单词</option>
+                <option value="">请选择单元</option>
             </select>
         </div>
         <textarea id="wordInput" rows="5" placeholder="输入单词或词组（每行一个，格式为 英文:中文）" readonly></textarea><br>
@@ -525,22 +517,52 @@
         let selectedUnitName = '';
         let prizes = [];
 
+        async function loadUnits() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/icloudbi/words/main/list.txt');
+                if (!response.ok) throw new Error('无法加载 list.txt 文件');
+                const data = await response.text();
+                const lines = data.trim().split('\n');
+
+                const unitSelect = document.getElementById('unitSelect');
+                lines.forEach(line => {
+                    const [name, url] = line.split(':').map(part => part.trim());
+                    if (name && url) {
+                        const option = document.createElement('option');
+                        option.value = url;
+                        option.textContent = name;
+                        unitSelect.appendChild(option);
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+                alert('无法加载单元列表，请检查 list.txt 文件是否存在并正确配置。');
+            }
+        }
+
         function updateWords() {
-            const selectedUnit = document.getElementById('unitSelect').value;
+            const selectedUrl = document.getElementById('unitSelect').value;
             const wordInput = document.getElementById('wordInput');
 
-            if (selectedUnit === 'custom') {
-                wordInput.value = '';
-                wordInput.readOnly = false;
-                selectedUnitName = '自定义单词';
-            } else if (wordGroups[selectedUnit]) {
-                wordInput.value = wordGroups[selectedUnit].join('\n');
-                wordInput.readOnly = true;
-                selectedUnitName = document.getElementById('unitSelect').options[document.getElementById('unitSelect').selectedIndex].text;
-            } else {
+            if (selectedUrl === '') {
                 wordInput.value = '';
                 wordInput.readOnly = true;
                 selectedUnitName = '';
+            } else {
+                fetch(selectedUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error(`无法加载 ${selectedUrl}`);
+                        return response.text();
+                    })
+                    .then(data => {
+                        wordInput.value = data.trim();
+                        wordInput.readOnly = true;
+                        selectedUnitName = document.getElementById('unitSelect').options[document.getElementById('unitSelect').selectedIndex].text;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('无法加载单词数据文件，请检查 URL 是否正确。');
+                    });
             }
 
             // Automatically add line numbers
