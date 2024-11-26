@@ -526,7 +526,7 @@
 
                 const unitSelect = document.getElementById('unitSelect');
                 lines.forEach(line => {
-                    const [name, url] = line.split(':').map(part => part.trim());
+                    const [name, url] = line.split(',').map(part => part.trim());
                     if (name && url) {
                         const option = document.createElement('option');
                         option.value = url;
