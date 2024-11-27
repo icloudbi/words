@@ -83,6 +83,10 @@
             color: white;
             margin-top: 10px;
         }
+        button.redeem-btn {
+            background-color: #28a745;
+            color: white;
+        }
         .result {
             margin-top: 10px;
             font-size: 18px;
@@ -250,12 +254,14 @@
                         <th>测试时间</th>
                         <th>正确率</th>
                         <th>抽奖结果</th>
+                        <th>兑奖状态</th>
                     </tr>
                 </thead>
                 <tbody id="resultsTableBody">
                     <!-- Results will be dynamically added here -->
                 </tbody>
             </table>
+            <button id="clearResultsBtn" onclick="clearQuizResults()">清除抽奖结果</button>
         </div>
     </div>
 
@@ -603,7 +609,8 @@
                 unitName: unitName,
                 date: formattedDate,
                 accuracy: accuracy,
-                prize: prize
+                prize: prize,
+                redeemed: 0 // 默认为0，表示未兑换
             });
 
             localStorage.setItem('quizResults', JSON.stringify(quizResults));
@@ -631,12 +638,24 @@
 
             quizResults.forEach(result => {
                 const row = document.createElement('tr');
+                const redeemCell = document.createElement('td');
+
+                if (result.redeemed === 0) {
+                    const redeemBtn = document.createElement('button');
+                    redeemBtn.className = 'redeem-btn';
+                    redeemBtn.innerText = '兑换';
+                    redeemBtn.onclick = () => redeemPrize(result);
+                    redeemCell.appendChild(redeemBtn);
+                } else {
+                    redeemCell.innerText = '已兑换';
+                }
                 row.innerHTML = `
                     <td>${result.unitName}</td>
                     <td>${result.date}</td>
                     <td>${result.accuracy}%</td>
                     <td>${result.prize}</td>
                 `;
+                row.appendChild(redeemCell);
                 resultsTableBody.appendChild(row);
             });
         }
@@ -735,6 +754,15 @@
         function recordWinningResult(prize) {
             const accuracy = ((correctAnswers / shuffledWords.length) * 100).toFixed(2);
             saveQuizResult(selectedUnitName, accuracy, prize);
+        }
+
+        function redeemPrize(result) {
+            const resultIndex = quizResults.findIndex(r => r.date === result.date);
+            if (resultIndex !== -1) {
+                quizResults[resultIndex].redeemed = 1;
+                localStorage.setItem('quizResults', JSON.stringify(quizResults));
+                loadQuizResults(); // Refresh the table to reflect changes
+            }
         }
         
         window.onload = () => {
