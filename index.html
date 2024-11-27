@@ -381,7 +381,7 @@
 
         function startQuiz() {
             const inputText = document.getElementById('wordInput').value.trim();
-            if (!inputText) return alert('请输入单词或词组');
+            if (!inputText) return alert('请先选择要测试的单元');
 
             words = inputText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
 
