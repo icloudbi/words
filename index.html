@@ -27,18 +27,13 @@
             flex-direction: column;
             justify-content: space-between;
         }
-        .refresh-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 20px;
-            color: #555;
+        .header-icons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
-        .settings-icon {
-            position: absolute;
-            top: 10px;
-            left: 10px;
+        .refresh-icon, .settings-icon, .results-icon {
             cursor: pointer;
             font-size: 20px;
             color: #555;
@@ -77,6 +72,7 @@
         button#luckyBtn {
             background-color: #28a745;
             color: white;
+            display: none; /* Initially hidden */
         }
         button#savePrizesBtn {
             background-color: #28a745;
@@ -165,12 +161,36 @@
         .prize-input {
             margin-bottom: 10px;
         }
+        .lottery-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .lottery-button {
+            padding: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #e9ecef;
+            transition: background-color 0.3s;
+        }
+        .lottery-button.highlight {
+            background-color: #ffc107;
+        }
+        .lottery-result {
+            font-size: 18px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <span class="refresh-icon" onclick="location.reload()">&#8635;</span>
-        <span class="settings-icon" onclick="openModal()">&#9881;</span>
+        <div class="header-icons">
+            <span class="refresh-icon" onclick="location.reload()">&#8635;</span>
+            <span class="results-icon" onclick="openResultsModal()">&#128064;</span>
+            <span class="settings-icon" onclick="openModal()">&#9881;</span>
+        </div>
         <h2>noai背单词</h2>
         <div id="unitSelectionContainer">
             <select id="unitSelect" onchange="updateWords()">
@@ -197,11 +217,32 @@
             <button id="submitBtn" onclick="checkAnswer()">提交</button>
             <div id="result" class="result"></div>
             <button id="restartBtn" onclick="restartQuiz()" style="display:none;">重新开始</button>
-            <button id="luckyBtn" onclick="window.location.href='https://icloudbi.github.io/words/lucky.html'" style="display:none;">抽奖游戏</button>
+            <button id="luckyBtn" onclick="showLotteryModal()">幸运抽奖</button>
         </div>
     </div>
 
-    <!-- Modal -->
+   <!-- Results Modal -->
+    <div id="resultsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeResultsModal()">&times;</span>
+            <h2>抽奖结果</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>单元名称</th>
+                        <th>测试时间</th>
+                        <th>正确率</th>
+                        <th>抽奖结果</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTableBody">
+                    <!-- Results will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -213,10 +254,33 @@
         </div>
     </div>
 
+    <!-- Lottery Modal -->
+    <div id="lotteryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLotteryModal()">&times;</span>
+            <h2>抽奖游戏</h2>
+            <div class="lottery-container">
+                <button class="lottery-button" onclick="spinLottery()">开始</button>
+                <button class="lottery-button"></button>
+                <button class="lottery-button"></button>
+                <button class="lottery-button"></button>
+                <button class="lottery-button"></button>
+                <button class="lottery-button"></button>
+                <button class="lottery-button"></button>
+                <button class="lottery-button"></button>
+                <button class="lottery-button"></button>
+            </div>
+            <div class="lottery-result" id="lotteryResult"></div>
+        </div>
+    </div>
+
     <script>
         let selectedUnitName = '';
         let prizes = [];
         let highestAccuracies = {};
+        let quizResults = []; // Ensure quizResults is initialized as an array
+        let lotterySpinsLeft = 0;
+        let unitSpinCount = {};
 
         async function loadHighestAccuracies() {
             const storedAccuracies = localStorage.getItem('highestAccuracies');
@@ -423,11 +487,12 @@
             document.getElementById('submitBtn').style.display = 'none';
             document.getElementById('restartBtn').style.display = 'block';
 
-            if (accuracy > 90) {
-                document.getElementById('luckyBtn').style.display = 'block';
+            if (accuracy >= 90) {
+                lotterySpinsLeft = 2;
             } else {
-                document.getElementById('luckyBtn').style.display = 'none';
+                lotterySpinsLeft = 1;
             }
+            document.getElementById('luckyBtn').style.display = lotterySpinsLeft > 0 ? 'block' : 'none';
 
             document.getElementById('questionNumber').innerText = ''; // Clear question number
 
@@ -445,6 +510,9 @@
                     }
                 }
             }
+
+            // Save quiz result
+            saveQuizResult(selectedUnitName, accuracy);
         }
 
         function restartQuiz() {
@@ -509,14 +577,174 @@
         }
 
         function getUnitDisplayText(unitName) {
-            const highestAccuracy = highestAccuracies[unitName] || '0.0';
-            return `${unitName} (${highestAccuracy}%)`;
+            const highestAccuracy = highestAccuracies[unitName] || '0';
+            const spinsUsed = unitSpinCount[unitName] || 0;
+            return `${unitName} (${highestAccuracy}%,${spinsUsed}/3)`;
+        }
+        function saveQuizResult(unitName, accuracy) {
+            const now = new Date();
+            const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            const randomPrizeIndex = Math.floor(Math.random() * prizes.length);
+            const prize = prizes[randomPrizeIndex];
+
+            quizResults.push({
+                unitName: unitName,
+                date: formattedDate,
+                accuracy: accuracy,
+                prize: prize
+            });
+
+            localStorage.setItem('quizResults', JSON.stringify(quizResults));
+        }
+
+        function openResultsModal() {
+            loadQuizResults();
+            document.getElementById('resultsModal').style.display = 'block';
+        }
+
+        function closeResultsModal() {
+            document.getElementById('resultsModal').style.display = 'none';
+        }
+
+        function loadQuizResults() {
+            const storedResults = localStorage.getItem('quizResults');
+            if (storedResults) {
+                quizResults = JSON.parse(storedResults);
+            } else {
+                quizResults = []; // Ensure quizResults is an empty array if no results are found
+            }
+
+            const resultsTableBody = document.getElementById('resultsTableBody');
+            resultsTableBody.innerHTML = ''; // Clear existing results
+
+            quizResults.forEach(result => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${result.unitName}</td>
+                    <td>${result.date}</td>
+                    <td>${result.accuracy}%</td>
+                    <td>${result.prize}</td>
+                `;
+                resultsTableBody.appendChild(row);
+            });
+        }
+
+        function showLotteryModal() {
+            if (!unitSpinCount[selectedUnitName]) {
+                unitSpinCount[selectedUnitName] = 0;
+            }
+
+            if (unitSpinCount[selectedUnitName] >= 3) {
+                alert('您在这个单元上已经抽过了三次奖，不能再抽奖了！');
+                return;
+            }
+
+            loadPrizes();
+            populateLotteryButtons();
+            document.getElementById('lotteryModal').style.display = 'block';
+        }
+
+        function closeLotteryModal() {
+            document.getElementById('lotteryModal').style.display = 'none';
+        }
+
+        function populateLotteryButtons() {
+            const buttons = document.querySelectorAll('.lottery-button:not(:first-child)');
+            buttons.forEach((button, index) => {
+                button.innerText = prizes[index % prizes.length];
+            });
+        }
+
+        function spinLottery() {
+            if (lotterySpinsLeft <= 0) {
+                alert('您已经用完了抽奖次数！');
+                return;
+            }
+
+            if (!unitSpinCount[selectedUnitName]) {
+                unitSpinCount[selectedUnitName] = 0;
+            }
+
+            if (unitSpinCount[selectedUnitName] >= 3) {
+                alert('您在这个单元上已经抽过了三次奖，不能再抽奖了！');
+                return;
+            }
+
+            const buttons = document.querySelectorAll('.lottery-button:not(:first-child)');
+            let currentIndex = 0;
+            const duration = 3000; // Duration of spinning
+            const intervalTime = 100; // Time between each highlight change
+            const intervals = duration / intervalTime;
+            let highlightInterval;
+
+            // Disable the start button during spinning
+            document.querySelector('.lottery-button:first-child').disabled = true;
+
+            highlightInterval = setInterval(() => {
+                buttons.forEach(button => button.classList.remove('highlight'));
+                buttons[currentIndex].classList.add('highlight');
+                currentIndex = (currentIndex + 1) % buttons.length;
+            }, intervalTime);
+
+            setTimeout(() => {
+                clearInterval(highlightInterval);
+                const winningIndex = Math.floor(Math.random() * buttons.length);
+                buttons[winningIndex].classList.add('highlight');
+
+                // Display the winning prize
+                document.getElementById('lotteryResult').innerText = `恭喜您获得：${buttons[winningIndex].innerText}`;
+
+                // Record the winning result
+                recordWinningResult(buttons[winningIndex].innerText);
+
+                // Decrease spins left
+                lotterySpinsLeft--;
+                unitSpinCount[selectedUnitName]++;
+                saveUnitSpinCounts(); // Save the updated spin counts
+
+                // Update the unit display text with the new spin count
+                document.getElementById('currentUnit').innerText = getUnitDisplayText(selectedUnitName);
+
+                // Re-enable the start button after a short delay
+                setTimeout(() => {
+                    document.querySelector('.lottery-button:first-child').disabled = false;
+                }, 2000);
+            }, duration);
+        }
+
+        function recordWinningResult(prize) {
+            const now = new Date();
+            const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+            quizResults.push({
+                unitName: selectedUnitName,
+                date: formattedDate,
+                accuracy: '100%', // Assuming 100% for lottery
+                prize: prize
+            });
+
+            localStorage.setItem('quizResults', JSON.stringify(quizResults));
         }
         
         window.onload = () => {
             loadUnits(); // Load units from list.txt
-            loadPrizes();
+            loadPrizes(); // Load default or saved prizes
+            loadQuizResults(); // Load quiz results on page load
+            loadUnitSpinCounts(); // Load unit spin counts on page load
         };
+
+        function loadUnitSpinCounts() {
+            const storedSpinCounts = localStorage.getItem('unitSpinCounts');
+            if (storedSpinCounts) {
+                unitSpinCount = JSON.parse(storedSpinCounts);
+            } else {
+                unitSpinCount = {};
+            }
+        }
+
+        function saveUnitSpinCounts() {
+            localStorage.setItem('unitSpinCounts', JSON.stringify(unitSpinCount));
+        }
     </script>
 </body>
 </html>
