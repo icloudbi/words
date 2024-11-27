@@ -7,3 +7,4 @@
 11月25日短语,https://icloudbi.github.io/words/data/ssp1125.txt
 11月26日短语1,https://icloudbi.github.io/words/data/ssp1126_1.txt
 11月26日短语2,https://icloudbi.github.io/words/data/ssp1126_2.txt
+自定义单词,https://icloudbi.github.io/words/data/custom.txt
