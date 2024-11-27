@@ -711,7 +711,7 @@
 
             const buttons = document.querySelectorAll('.lottery-button:not(:first-child)');
             let currentIndex = 0;
-            const duration = 3000; // Duration of spinning
+            const duration = Math.floor(2000+Math.random() * 100* buttons.length); // Duration of spinning
             const intervalTime = 100; // Time between each highlight change
             const intervals = duration / intervalTime;
             let highlightInterval;
@@ -727,7 +727,7 @@
 
             setTimeout(() => {
                 clearInterval(highlightInterval);
-                const winningIndex = Math.floor(Math.random() * buttons.length);
+                const winningIndex = currentIndex;
                 buttons[winningIndex].classList.add('highlight');
 
                 // Display the winning prize
