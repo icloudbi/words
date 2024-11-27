@@ -78,6 +78,11 @@
             background-color: #28a745;
             color: white;
         }
+        button#clearResultsBtn {
+            background-color: #ff6347;
+            color: white;
+            margin-top: 10px;
+        }
         .result {
             margin-top: 10px;
             font-size: 18px;
@@ -181,6 +186,18 @@
         .lottery-result {
             font-size: 18px;
             font-weight: bold;
+        }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .results-table th, .results-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .results-table th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
@@ -627,6 +644,14 @@
                 `;
                 resultsTableBody.appendChild(row);
             });
+        }
+        
+        function clearQuizResults() {
+            if (confirm("确定要清除所有抽奖结果吗？")) {
+                quizResults = [];
+                localStorage.removeItem('quizResults');
+                loadQuizResults(); // Refresh the table to reflect changes
+            }
         }
 
         function showLotteryModal() {
