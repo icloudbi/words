@@ -527,9 +527,6 @@
                     }
                 }
             }
-
-            // Save quiz result
-            saveQuizResult(selectedUnitName, accuracy);
         }
 
         function restartQuiz() {
@@ -598,11 +595,9 @@
             const spinsUsed = unitSpinCount[unitName] || 0;
             return `${unitName} (${highestAccuracy}%,${spinsUsed}/3)`;
         }
-        function saveQuizResult(unitName, accuracy) {
+        function saveQuizResult(unitName, accuracy, prize) {
             const now = new Date();
             const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-            const randomPrizeIndex = Math.floor(Math.random() * prizes.length);
-            const prize = prizes[randomPrizeIndex];
 
             quizResults.push({
                 unitName: unitName,
@@ -738,17 +733,8 @@
         }
 
         function recordWinningResult(prize) {
-            const now = new Date();
-            const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-
-            quizResults.push({
-                unitName: selectedUnitName,
-                date: formattedDate,
-                accuracy: '100%', // Assuming 100% for lottery
-                prize: prize
-            });
-
-            localStorage.setItem('quizResults', JSON.stringify(quizResults));
+            const accuracy = ((correctAnswers / shuffledWords.length) * 100).toFixed(2);
+            saveQuizResult(selectedUnitName, accuracy, prize);
         }
         
         window.onload = () => {
