@@ -510,9 +510,9 @@
             document.getElementById('submitBtn').style.display = 'none';
             document.getElementById('restartBtn').style.display = 'block';
 
-            if (accuracy >= 90) {
+            if (accuracy > 99.9) {
                 lotterySpinsLeft = 2;
-            } else {
+            } else if (accuracy >= 90){
                 lotterySpinsLeft = 1;
             }
             document.getElementById('luckyBtn').style.display = lotterySpinsLeft > 0 ? 'block' : 'none';
@@ -727,6 +727,7 @@
 
             setTimeout(() => {
                 clearInterval(highlightInterval);
+                buttons.forEach(button => button.classList.remove('highlight'));
                 const winningIndex = currentIndex;
                 buttons[winningIndex].classList.add('highlight');
 
