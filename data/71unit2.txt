@@ -1,6 +1,6 @@
 radio:收音机
-deal:处理
-deal with:处理
+deal:处理（单词）
+deal with:处理（短语）
 fear:害怕
 deep:低沉的
 rough:粗糙的
@@ -21,8 +21,8 @@ later:后来
 news:消息
 funny:滑稽的
 costume:服装
-instead:代替
-instead of:代替
+instead:代替（单词）
+instead of:代替（短语）
 had better:最好
 disappointment:失望
 respond:回应
