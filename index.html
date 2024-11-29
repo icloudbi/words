@@ -632,7 +632,10 @@
             } else {
                 quizResults = []; // Ensure quizResults is an empty array if no results are found
             }
-
+            
+            // Sort results by date in descending order
+            quizResults.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
             const resultsTableBody = document.getElementById('resultsTableBody');
             resultsTableBody.innerHTML = ''; // Clear existing results
 
