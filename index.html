@@ -799,6 +799,7 @@
                     const reader = new FileReader();
                     reader.onload = e => {
                         try {
+                            console.log('File content:', e.target.result);
                             const data = JSON.parse(e.target.result);
                             highestAccuracies = data.highestAccuracies || {};
                             quizResults = data.quizResults || [];
