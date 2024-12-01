@@ -261,6 +261,8 @@
                     <!-- Results will be dynamically added here -->
                 </tbody>
             </table>
+            <button id="exportDataBtn" onclick="exportData()">导出数据</button>
+            <button id="importDataBtn" onclick="importData()">导入数据</button>
             <button id="clearResultsBtn" onclick="clearQuizResults()">清除抽奖结果</button>
         </div>
     </div>
@@ -767,6 +769,58 @@
                 localStorage.setItem('quizResults', JSON.stringify(quizResults));
                 loadQuizResults(); // Refresh the table to reflect changes
             }
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify({
+                highestAccuracies: highestAccuracies,
+                quizResults: quizResults,
+                prizes: prizes,
+                unitSpinCount: unitSpinCount
+            }, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'quiz_data.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = event => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            highestAccuracies = data.highestAccuracies || {};
+                            quizResults = data.quizResults || [];
+                            prizes = data.prizes || [];
+                            unitSpinCount = data.unitSpinCount || {};
+                            localStorage.setItem('highestAccuracies', JSON.stringify(highestAccuracies));
+                            localStorage.setItem('quizResults', JSON.stringify(quizResults));
+                            localStorage.setItem('prizes', JSON.stringify(prizes));
+                            localStorage.setItem('unitSpinCounts', JSON.stringify(unitSpinCount));
+                            loadQuizResults();
+                            loadPrizes();
+                            loadUnitSpinCounts();
+                            alert('数据导入成功！');
+                        } catch (error) {
+                            console.error('Error importing data:', error);
+                            alert('无效的数据文件，请尝试再次导入。');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
         }
         
         window.onload = () => {
