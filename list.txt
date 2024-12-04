@@ -9,3 +9,4 @@
 7年级上册Unit6,https://icloudbi.github.io/words/data/71unit6.txt
 SSP报纸(11月25日)短语,https://icloudbi.github.io/words/data/ssp1125.txt
 SSP报纸(11月29日)短语,https://icloudbi.github.io/words/data/ssp1129.txt
+SSP报纸(12月03日)短语,https://icloudbi.github.io/words/data/ssp1203.txt
