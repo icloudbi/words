@@ -17,5 +17,5 @@ custom:习俗
 rich:丰富的
 whole:完全的
 magic:魔法
-specialeffects:特技效果
+special effects:特技效果
 recommend:推荐
