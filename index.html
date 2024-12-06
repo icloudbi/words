@@ -154,6 +154,8 @@
             width: 80%;
             max-width: 600px;
             border-radius: 10px;
+            height: 80%;
+            overflow-y: auto;
         }
         .close {
             color: #aaa;
@@ -261,8 +263,9 @@
                     <!-- Results will be dynamically added here -->
                 </tbody>
             </table>
-            <button id="exportDataBtn" onclick="exportData()">导出数据</button>
-            <button id="importDataBtn" onclick="importData()">导入数据</button>
+            <!--<button id="exportDataBtn" onclick="exportData()">导出数据</button>
+            <button id="importDataBtn" onclick="importData()">导入数据</button>-->
+            <button id="editDataBtn" onclick="editData()">编辑数据</button>
             <button id="clearResultsBtn" onclick="clearQuizResults()">清除抽奖结果</button>
         </div>
     </div>
@@ -276,6 +279,16 @@
                 <!-- Prize inputs will be dynamically added here -->
             </div>
             <button id="savePrizesBtn" onclick="savePrizes()">保存</button>
+        </div>
+    </div>
+
+    <!-- Edit Data Modal -->
+    <div id="editDataModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditDataModal()">&times;</span>
+            <h2>编辑数据</h2>
+            <textarea id="jsonData" rows="20" cols="50"></textarea><br>
+            <button id="saveDataBtn" onclick="saveEditedData()">保存</button>
         </div>
     </div>
 
@@ -822,6 +835,46 @@
                 }
             };
             input.click();
+        }
+
+        function editData() {
+            const jsonData = JSON.stringify({
+                highestAccuracies: highestAccuracies,
+                quizResults: quizResults,
+                prizes: prizes,
+                unitSpinCount: unitSpinCount
+            }, null, 2);
+            document.getElementById('jsonData').value = jsonData;
+            document.getElementById('editDataModal').style.display = 'block';
+        }
+
+        function saveEditedData() {
+            try {
+                const editedData = JSON.parse(document.getElementById('jsonData').value);
+                highestAccuracies = editedData.highestAccuracies || {};
+                quizResults = editedData.quizResults || [];
+                prizes = editedData.prizes || ["未中奖", "看一部电影", "未中奖", "一个冰淇淋", "5元小礼品", "一份小零食", "未中奖", "一张免学券"];
+                unitSpinCount = editedData.unitSpinCount || {};
+
+                localStorage.setItem('highestAccuracies', JSON.stringify(highestAccuracies));
+                localStorage.setItem('quizResults', JSON.stringify(quizResults));
+                localStorage.setItem('prizes', JSON.stringify(prizes));
+                localStorage.setItem('unitSpinCounts', JSON.stringify(unitSpinCount));
+
+                loadQuizResults();
+                loadPrizes();
+                loadUnitSpinCounts();
+
+                alert('数据保存成功！');
+                closeEditDataModal();
+            } catch (error) {
+                console.error('Error saving edited data:', error);
+                alert('无效的数据格式，请尝试再次保存。');
+            }
+        }
+
+        function closeEditDataModal() {
+            document.getElementById('editDataModal').style.display = 'none';
         }
         
         window.onload = () => {
