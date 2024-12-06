@@ -47,7 +47,7 @@
             resize: vertical;
             flex-grow: 1; /* Allow textarea to grow and fill available space */
         }
-        input[type="text"] {
+        input[type="text"], input[type="password"] {
             width: calc(100% - 22px);
             padding: 10px;
             margin-bottom: 10px;
@@ -288,6 +288,7 @@
             <span class="close" onclick="closeEditDataModal()">&times;</span>
             <h2>编辑数据</h2>
             <textarea id="jsonData" rows="20" cols="50"></textarea><br>
+            <input type="password" id="passwordInput" placeholder="输入密码"><br>
             <button id="saveDataBtn" onclick="saveEditedData()">保存</button>
         </div>
     </div>
