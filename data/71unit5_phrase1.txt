@@ -1,20 +1,20 @@
-1.what types of films:什么种类的电影
-2.a musical:一部音乐剧
-3.at this year’s International Film Festival:在今年的国际电影节上
-4.a science-fiction film:一部科幻电影
-5.release a film:上映一部电影
-6.explore Mars:探索火星
-7.expect to do sth.:期待做某事
-8.expect a more pleasant life:期待更加愉悦的生活
-9.learn to farm:学会耕种
-10.the main actors/actresses:主要男/女演员
-11.the latest film:最近的电影，最新的电影
-12.an exciting film:令人兴奋的电影
-13.let film-goers down:让电影观众失望
-14.interesting/uninteresting:有趣的/无聊的
-15.friendly/unfriendly:友好的/不友好的
-16.agree/disagree:同意/不同意
-17.disorder:混乱，使紊乱
-18.rewrite:重写
-19.reread:重读
+what types of films:什么种类的电影
+a musical:一部音乐剧
+at this year’s International Film Festival:在今年的国际电影节上
+a science-fiction film:一部科幻电影
+release a film:上映一部电影
+explore Mars:探索火星
+expect to do sth.:期待做某事
+expect a more pleasant life:期待更加愉悦的生活
+learn to farm:学会耕种
+the main actors/actresses:主要男/女演员
+the latest film:最近的电影，最新的电影
+an exciting film:令人兴奋的电影
+let film-goers down:让电影观众失望
+interesting/uninteresting:有趣的/无聊的
+friendly/unfriendly:友好的/不友好的
+agree/disagree:同意/不同意
+disorder:混乱，使紊乱
+rewrite:重写
+reread:重读
 a needle pulling thread:穿针引线
