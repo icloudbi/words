@@ -461,7 +461,7 @@
         }
 
         function checkAnswer() {
-            const answer = document.getElementById('answerInput').value.trim();
+            const answer = document.getElementById('answerInput').value.trim().replace(/\s+/g, '');
             const [english, chinese] = shuffledWords[currentWordIndex];
             const mode = document.getElementById('modeSelect').value;
 
