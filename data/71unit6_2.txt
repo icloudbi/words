@@ -1,0 +1,17 @@
+tourist:旅行者
+attraction:向往的地方
+both:两个
+flow:流动
+leading:最重要的
+port:港口
+environment:环境
+provide:提供
+riverside:河畔
+almost:几乎
+along:沿着
+bank:岸
+nurture:养育
+waterfall:瀑布
+silver:银色的
+belt:皮带
+glow:发光
