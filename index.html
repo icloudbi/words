@@ -220,7 +220,7 @@
                 <option value="">请选择单元</option>
             </select>
         </div>
-        <textarea id="wordInput" rows="5" placeholder="单元列表显示：单元名称（最高正确率，已抽奖次数/最大抽奖次数）" readonly></textarea><br>
+        <textarea id="wordInput" rows="5" placeholder="单元列表显示：单元名称（最高正确率，已抽奖次数/最大抽奖次数）"></textarea><br>
         <div id="modeSelectionContainer">
             <label for="modeSelect">选择模式:</label>
             <select id="modeSelect">
@@ -464,6 +464,7 @@
             const answer = document.getElementById('answerInput').value.trim().replace(/\s+/g, '');
             const [english, chinese] = shuffledWords[currentWordIndex];
             const mode = document.getElementById('modeSelect').value;
+            english = english.trim().replace(/\s+/g, '');
 
             let isCorrect = false;
             if (mode === 'engToChi' || mode === 'mixed' && document.getElementById('question').innerText.includes(english)) {
