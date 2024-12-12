@@ -10,11 +10,11 @@ frozen:冰冻的
 trainer:教练
 adventure:冒险
 woods:树林
-promise:承诺
-promise:诺言
+promise:承诺，诺言
 blood:血
 lifeblood:生命线
 have ... in common:有相同的特征
 cruise:乘船游览
 interest:吸引力
 tower:塔
+tourist:旅行者
