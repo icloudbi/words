@@ -464,13 +464,13 @@
             const answer = document.getElementById('answerInput').value.trim().replace(/\s+/g, '');
             const [english, chinese] = shuffledWords[currentWordIndex];
             const mode = document.getElementById('modeSelect').value;
-            english = english.trim().replace(/\s+/g, '');
+            let english2 = english.trim().replace(/\s+/g, '');
 
             let isCorrect = false;
             if (mode === 'engToChi' || mode === 'mixed' && document.getElementById('question').innerText.includes(english)) {
                 isCorrect = answer.toLowerCase() === chinese.toLowerCase();
             } else if (mode === 'chiToEng' || mode === 'mixed' && document.getElementById('question').innerText.includes(chinese)) {
-                isCorrect = answer.toLowerCase() === english.toLowerCase();
+                isCorrect = answer.toLowerCase() === english2.toLowerCase();
             }
 
             if (isCorrect) {
