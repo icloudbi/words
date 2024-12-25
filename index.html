@@ -458,6 +458,13 @@
 
             // Update question number
             document.getElementById('questionNumber').innerText = `第 ${currentWordIndex + 1} / 共 ${shuffledWords.length} 个`;
+
+            // Reset submit button label
+            document.getElementById('submitBtn').innerText = '提交';
+            document.getElementById('submitBtn').onclick = checkAnswer;
+
+            currentWordIndex++;
+
         }
 
         function checkAnswer() {
@@ -498,13 +505,16 @@
                 }
 
                 document.getElementById('result').classList.add('incorrect');
-                times=5000
+                times=99000
+                // Change submit button to "下一题"
+                document.getElementById('submitBtn').innerText = '下一题';
+                document.getElementById('submitBtn').onclick = showNextQuestion;
             }
 
             setTimeout(() => {
                 document.getElementById('result').innerText = '';
                 document.getElementById('result').classList.remove('correct', 'incorrect');
-                currentWordIndex++;
+                //currentWordIndex++;
                 showNextQuestion();
             }, times);
         }
