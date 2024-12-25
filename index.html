@@ -435,6 +435,7 @@
         }
 
         function showNextQuestion() {
+            currentWordIndex++;
             if (currentWordIndex >= shuffledWords.length) {
                 endQuiz();
                 return;
@@ -463,7 +464,7 @@
             document.getElementById('submitBtn').innerText = '提交';
             document.getElementById('submitBtn').onclick = checkAnswer;
 
-            currentWordIndex++;
+            //currentWordIndex++;
 
         }
 
