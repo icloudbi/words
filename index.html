@@ -472,7 +472,7 @@
             } else if (mode === 'chiToEng' || mode === 'mixed' && document.getElementById('question').innerText.includes(chinese)) {
                 isCorrect = answer.toLowerCase() === english2.toLowerCase();
             }
-
+            let times=1000
             if (isCorrect) {
                 correctAnswers++;
                 consecutiveCorrect++;
@@ -498,6 +498,7 @@
                 }
 
                 document.getElementById('result').classList.add('incorrect');
+                times=5000
             }
 
             setTimeout(() => {
@@ -505,7 +506,7 @@
                 document.getElementById('result').classList.remove('correct', 'incorrect');
                 currentWordIndex++;
                 showNextQuestion();
-            }, 1500);
+            }, times);
         }
 
         function endQuiz() {
