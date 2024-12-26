@@ -1,4 +1,5 @@
 7年级上册Unit1单词,https://icloudbi.github.io/words/data/71unit1.txt
+7年级上册Unit1短语1,https://icloudbi.github.io/words/data/71unit1_phrase1.txt
 7年级上册Unit2单词,https://icloudbi.github.io/words/data/71unit2.txt
 7年级上册Unit2短语1,https://icloudbi.github.io/words/data/71unit2_phrase1.txt
 7年级上册Unit3单词,https://icloudbi.github.io/words/data/71unit3.txt
@@ -15,7 +16,6 @@
 7年级上册Unit6短语1,https://icloudbi.github.io/words/data/71unit6_phrase1.txt
 7年级上册Unit6短语2,https://icloudbi.github.io/words/data/71unit6_phrase2.txt
 7年级上册Unit6短语3,https://icloudbi.github.io/words/data/71unit6_phrase3.txt
-7年级上册Unit6短语4,https://icloudbi.github.io/words/data/71unit6_phrase4.txt
 SSP报纸(11月25日)短语,https://icloudbi.github.io/words/data/ssp1125.txt
 SSP报纸(11月29日)短语,https://icloudbi.github.io/words/data/ssp1129.txt
 SSP报纸(12月03日)短语,https://icloudbi.github.io/words/data/ssp1203.txt
