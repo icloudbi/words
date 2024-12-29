@@ -480,7 +480,6 @@
             } else if (mode === 'chiToEng' || mode === 'mixed' && document.getElementById('question').innerText.includes(chinese)) {
                 isCorrect = answer.toLowerCase() === english2.toLowerCase();
             }
-            let times=1000
             if (isCorrect) {
                 correctAnswers++;
                 consecutiveCorrect++;
@@ -495,6 +494,12 @@
                 }
 
                 document.getElementById('result').classList.add('correct');
+                setTimeout(() => {
+                    document.getElementById('result').innerText = '';
+                    document.getElementById('result').classList.remove('correct', 'incorrect');
+                    //currentWordIndex++;
+                    showNextQuestion();
+                }, 1000);
             } else {
                 consecutiveIncorrect++;
                 consecutiveCorrect = 0;
@@ -512,12 +517,7 @@
                 document.getElementById('submitBtn').onclick = showNextQuestion;
             }
 
-            setTimeout(() => {
-                document.getElementById('result').innerText = '';
-                document.getElementById('result').classList.remove('correct', 'incorrect');
-                //currentWordIndex++;
-                showNextQuestion();
-            }, times);
+            
         }
 
         function endQuiz() {
