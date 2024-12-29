@@ -6,6 +6,7 @@
 7年级上册Unit4单词,https://icloudbi.github.io/words/data/71unit4.txt
 7年级上册Unit4短语1,https://icloudbi.github.io/words/data/71unit4_phrase1.txt
 7年级上册Unit4短语2,https://icloudbi.github.io/words/data/71unit4_phrase2.txt
+7年级上册Unit4短语1227,https://icloudbi.github.io/words/data/71unit4_phrase1227.txt
 7年级上册Unit5单词1,https://icloudbi.github.io/words/data/71unit5_1.txt
 7年级上册Unit5单词2,https://icloudbi.github.io/words/data/71unit5_2.txt
 7年级上册Unit5短语1,https://icloudbi.github.io/words/data/71unit5_phrase1.txt
