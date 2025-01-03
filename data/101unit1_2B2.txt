@@ -1,0 +1,115 @@
+blame:责备  
+disease:疾病  
+theme:主题  
+reaction:反应  
+factor:因素  
+dizzy:头晕的  
+chemical:化学的  
+incredible:难以置信的  
+frightening:可怕的  
+curiosity:好奇心  
+pressure:压力  
+eyewitness:目击者  
+impress:留下印象  
+account:账户；描述  
+statistic:统计数据  
+preserve:保存  
+Seat belt:安全带  
+solution:解决方案  
+continent:大陆  
+independent:独立的  
+native:本地的；土著的  
+surfing:冲浪  
+boot:靴子  
+adapt:适应  
+ambitious:有雄心的  
+section:部分  
+limit:限制  
+reveal:揭示  
+attempt:尝试  
+author:作者  
+contain:包含  
+responsible:负责的  
+vehicle:车辆  
+limited:有限的  
+Check out:结账；查看  
+reliable:可靠的  
+Be likely to:很可能  
+extent:程度  
+judgment:判断  
+issue:问题  
+strategy:策略  
+conduct:行为；进行  
+confidence:信心  
+adventure:冒险  
+achievement:成就  
+ski:滑雪  
+quit:退出  
+charity:慈善  
+episode:插曲  
+supply:供应  
+series:系列  
+devoted:专注的  
+previous:之前的  
+brief:简短的  
+quote:引用  
+clap:鼓掌  
+indeed:确实  
+positive:积极的  
+effect:效果  
+performance:表现  
+propose:提议  
+lecture:讲座  
+document:文件  
+resource:资源  
+eager:渴望的  
+frequently:经常地  
+update:更新  
+otherwise:否则  
+motivate:激励  
+mood:心情  
+audience:观众  
+hurricane:飓风  
+path:路径  
+county:县  
+valley:山谷  
+accident:事故  
+recognize:识别  
+aid:援助  
+function:功能  
+donate:捐赠  
+promote:促进  
+cooperation:合作  
+creative:创造性的  
+satisfaction:满意  
+benefit:好处  
+concentration:专注  
+mental:心理的  
+academic:学术的  
+procedure:程序  
+aware:意识到的  
+addicted:上瘾的  
+debate:辩论  
+uniform:制服  
+identity:身份  
+signal:信号  
+summarize:总结  
+master:掌握  
+prevent:预防  
+cure:治愈  
+cancer:癌症  
+Wi-Fi:无线网络  
+sail:航行  
+tight:紧的  
+ocean:海洋  
+pursue:追求  
+Rock band:摇滚乐队  
+In charge of:负责  
+Sum up:总结  
+Fade away:逐渐消失  
+obviously:显然地  
+Social media:社交媒体  
+Ice sheet:冰盖  
+Polar bear:北极熊  
+Apart from:除了  
+Due to:由于
