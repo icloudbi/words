@@ -24,6 +24,3 @@ SSP报纸(11月25日)短语,https://icloudbi.github.io/words/data/ssp1125.txt
 SSP报纸(11月29日)短语,https://icloudbi.github.io/words/data/ssp1129.txt
 SSP报纸(12月03日)短语,https://icloudbi.github.io/words/data/ssp1203.txt
 SSP报纸(12月13日)短语,https://icloudbi.github.io/words/data/ssp1213.txt
-高中第一册Unit1-2B1,https://icloudbi.github.io/words/data/101unit1_2B1.txt
-高中第一册Unit1-2B2,https://icloudbi.github.io/words/data/101unit1_2B2.txt
-高中第一册Unit3-4,https://icloudbi.github.io/words/data/101unit3_4.txt
