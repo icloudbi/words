@@ -1,0 +1,3 @@
+高中第一册Unit1-2B1,https://icloudbi.github.io/words/data/101unit1_2B1.txt
+高中第一册Unit1-2B2,https://icloudbi.github.io/words/data/101unit1_2B2.txt
+高中第一册Unit3-4,https://icloudbi.github.io/words/data/101unit3_4.txt
