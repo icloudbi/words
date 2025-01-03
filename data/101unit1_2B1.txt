@@ -1,0 +1,92 @@
+tip:提示
+electricity:电
+inspire:激励
+material:材料
+deliver:递送
+senior:高级的
+quality:质量
+junior:初级的
+conference:会议
+schedule:日程安排
+currently:目前
+improve:改进
+partner:伙伴
+goal:目标
+organization:组织
+element:元素
+select:选择
+behaviour:行为
+respond:回应
+unique:独特的
+type:类型
+button:按钮
+death:死亡
+earn:赚取
+scene:场景
+description:描述
+routine:常规
+Video clip:视频片段
+midnight:午夜
+Time capsule:时间胶囊
+onto:到...上
+event:事件
+Hula hoop:呼啦圈
+typical:典型的
+Well off:富裕的
+digital:数字的
+Be keen on:热衷于
+acquire:获得
+Paper towel:纸巾
+challenge:挑战
+Be ashamed of:为...感到羞愧
+volunteer:志愿者
+On behalf of:代表
+location:位置
+Refer to:提到
+length:长度
+Chinese knot:中国结
+Dragon boat:龙舟
+envelope:信封
+memory:记忆
+cafe:咖啡馆
+vote:投票
+chat:聊天
+nowhere:无处
+embarrassed:尴尬的
+shocked:震惊的
+opinion:观点
+blog:博客
+settle:定居
+adventure:冒险
+energetic:精力充沛的
+structure:结构
+origin:起源
+sculpture:雕塑
+desert:沙漠
+weapon:武器
+entrance:入口
+crowded:拥挤的
+battle:战斗
+indicate:指示
+altogether:总共
+afterwards:之后
+destination:目的地
+downtown:市中心
+million:百万
+moment:时刻
+amazing:惊人的
+Belong to:属于
+historic:历史的
+In case:以防万一
+site:地点
+In the distance:在远处
+former:以前的
+A variety of:各种各样的
+poetry:诗歌
+Prime minister:首相
+basis:基础
+court:法庭
+originally:最初
+defence:防御
+nowadays:如今
+view:观点
